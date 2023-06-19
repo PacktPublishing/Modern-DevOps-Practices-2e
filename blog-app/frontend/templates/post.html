@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microservices Blog - {{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <h2>Reviews:</h2>
+    <ul>
+        {% for review in reviews %}
+            <li>{{ review }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Rating: {{ rating }}</h2>
+    <h2>Add a Review:</h2>
+    <form action="/posts/{{ post.id }}/reviews" method="POST">
+        <textarea name="review" placeholder="Enter your review"></textarea><br>
+        <input type="number" name="rating" placeholder="Enter your rating (1-5)"><br>
+        <input type="submit" value="Add Review">
+    </form>
+</body>
+</html>
+
