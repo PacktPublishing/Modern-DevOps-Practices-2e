@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nginx-dynamic
+spec:
+  selector:
+    matchLabels:
+      app: nginx-dynamic
+  serviceName: "nginx-dynamic"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-dynamic
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: html
+    spec:
+      storageClassName: "fast"
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 40Gi
