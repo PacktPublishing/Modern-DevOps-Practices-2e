@@ -1,8 +1,12 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: flask-app
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
 spec:
-  backend:
-    serviceName: flask-app
-    servicePort: 5000
+  defaultBackend:
+    service:
+      name: flask-app
+      port: 
+        number: 5000
