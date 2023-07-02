@@ -1,0 +1,6 @@
+subscription_id = "<SUBSCRIPTION_ID>"
+app_id          = "<CLIENT_ID>"
+password        = "<CLIENT_SECRET>"
+tenant          = "<TENANT_ID>"
+rg_name         = "terraform-exercise"
+rg_location     = "West Europe"
