@@ -1,13 +1,25 @@
 ---
-- hosts: k8s-control-plane:k8s-worker
+- hosts: k8s-control-plane
   become: true
   tasks:
 
+  - name: Check if kubeadm has already run
+    stat:
+      path: "/etc/kubernetes/pki/ca.key"
+    register: kubeadm_ca
   - name: Init kubeadm
     shell: |
       kubeadm init
     register: init_cluster
     environment:
       no_proxy: "$no_proxy,.svc,.svc.cluster.local"
+    when: not kubeadm_ca.stat.exists
   - debug:
       var: init_cluster
+  - name: "Copy config file"
+    fetch:
+      src: /etc/kubernetes/admin.conf
+      dest: "{{ lookup('env', 'HOME') }}/admin.conf"
+      flat: yes
+    run_once: yes
+    ignore_errors: yes
