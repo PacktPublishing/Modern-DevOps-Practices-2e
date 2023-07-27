@@ -1,0 +1,37 @@
+---
+- hosts: k8s-control-plane:k8s-worker
+  become: true
+  tasks:
+  - name: Ensure dependencies are installed.
+    apt:
+      name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+      state: present
+
+  - name: Download Google Cloud signing key
+    apt_key:
+      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      state: present
+
+  - name: Add the Kubernetes apt repo
+    apt_repository:
+      repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+      state: present
+      update_cache: true
+
+  - name: Ensure kubelet is installed.
+    package:
+      name: "kubelet"
+      state: "present"
+
+  - name: Ensure kubeadm is installed.
+    package:
+      name: "kubeadm"
+      state: "present"
+
+  - name: Ensure kubectl is installed.
+    package:
+      name: "kubectl"
+      state: "present"

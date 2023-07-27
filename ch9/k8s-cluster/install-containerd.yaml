@@ -1,0 +1,39 @@
+---
+- hosts: k8s-control-plane:k8s-worker
+  become: true
+  tasks:
+  - name: Ensure dependencies are installed.
+    apt:
+      name:
+        - apt-transport-https
+        - ca-certificates
+        - gnupg2
+      state: present
+
+  - name: Add Docker apt key.
+    apt_key:
+      url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+      id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+      state: present
+    register: add_repository_key
+    ignore_errors: true
+
+  - name: Ensure curl is present (on older systems without SNI).
+    package: name=curl state=present
+    when: add_repository_key is failed
+
+  - name: Add Docker apt key (alternative for older systems without SNI).
+    shell: >
+      curl -sSL https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg | sudo apt-key add -
+    when: add_repository_key is failed
+
+  - name: Add Docker repository.
+    apt_repository:
+      repo: "deb [arch={{ (ansible_architecture == \"aarch64\") | ternary(\"arm64\", \"amd64\") }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+      state: present
+      update_cache: true
+
+  - name: Ensure containerd is installed.
+    package:
+      name: "containerd.io"
+      state: "present"

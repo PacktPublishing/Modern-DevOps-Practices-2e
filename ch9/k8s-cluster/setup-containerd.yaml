@@ -1,0 +1,64 @@
+---
+- hosts: k8s-control-plane:k8s-worker
+  become: true
+  tasks:
+  - name: Ensure containerd is started and enabled at boot.
+    service:
+      name: containerd
+      state: "started"
+      enabled: "true"
+
+  - name: Ensure containerd config directory exists.
+    file:
+      path: /etc/containerd
+      state: directory
+    register: containerd_dir
+
+  - name: Get defaults from containerd.
+    command: containerd config default
+    changed_when: false
+    register: containerd_config_default
+
+  - name: Prepare containerd/config.toml from default config
+    copy:
+      dest: /tmp/containerd_config.toml
+      content: "{{ containerd_config_default.stdout }}"
+    changed_when: false
+
+  - name: Set Cgroup driver to systemd
+    lineinfile:
+      insertafter: '.*\[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options\]$'
+      line: '          SystemdCgroup = true'
+      state: present
+      path: /tmp/containerd_config.toml
+    changed_when: false
+
+  - name: Make sure  SystemdCgroup = false is not set
+    ansible.builtin.lineinfile:
+      path: /tmp/containerd_config.toml
+      state: absent
+      line: '            SystemdCgroup = false'
+    notify: restart containerd
+    changed_when: false
+
+  - name: Copy config.toml to /etc/containerd
+    copy:
+      remote_src: true
+      src: /tmp/containerd_config.toml
+      dest: /etc/containerd/config.toml
+    notify: restart containerd
+
+  - name: Cleanup temporary file
+    file:
+      path: /tmp/containerd_config.toml
+      state: absent
+    changed_when: false
+
+  - name: Ensure containerd is restarted immediately if necessary.
+    meta: flush_handlers
+
+  handlers:
+  - name: restart containerd
+    service:
+      name: containerd
+      state: restarted
