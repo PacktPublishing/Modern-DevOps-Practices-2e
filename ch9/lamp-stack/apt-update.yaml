@@ -1,5 +1,5 @@
 ---
-  - hosts: k8s-control-plane:k8s-worker
+  - hosts: webservers:dbservers
     become: true
     tasks:
       - name: Update apt packages

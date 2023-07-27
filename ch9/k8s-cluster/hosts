@@ -1,6 +1,0 @@
-[webservers]
-k8s-control-plane ansible_host=k8s-control-plane
-[dbservers]
-k8s-worker ansible_host=k8s-worker
-[all:vars]
-ansible_python_interpreter=/usr/bin/python3

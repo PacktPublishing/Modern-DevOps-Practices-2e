@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "azurerm"
-      version = "=3.55.0"
+      version = "=2.4.0"
     }
   }
 }
@@ -30,7 +30,7 @@ resource "azurerm_subnet" "internal" {
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
-  address_prefixes     = ["10.0.2.0/24"]
+  address_prefix       = "10.0.2.0/24"
 }
 
 resource "azurerm_public_ip" "control_node_publicip" {
@@ -93,7 +93,7 @@ resource "azurerm_virtual_machine" "control_node" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
+    sku       = "16.04-LTS"
     version   = "latest"
   }
   storage_os_disk {
@@ -113,8 +113,8 @@ resource "azurerm_virtual_machine" "control_node" {
   tags = {}
 }
 
-resource "azurerm_public_ip" "k8s-control-plane_publicip" {
-    name                         = "k8s-control-plane-public-ip"
+resource "azurerm_public_ip" "web_publicip" {
+    name                         = "web-public-ip"
     location                     = azurerm_resource_group.main.location
     resource_group_name          = azurerm_resource_group.main.name
     allocation_method            = "Dynamic"
@@ -122,19 +122,31 @@ resource "azurerm_public_ip" "k8s-control-plane_publicip" {
     tags = {}
 }
 
-resource "azurerm_network_security_group" "k8s-control-plane_nsg" {
-    name                = "k8s-control-plane-nsg"
+resource "azurerm_network_security_group" "web_nsg" {
+    name                = "web-nsg"
     location            = azurerm_resource_group.main.location
     resource_group_name = azurerm_resource_group.main.name
 
     security_rule {
-        name                       = "Allow_all_Internal"
+        name                       = "SSH"
+        priority                   = 1001
+        direction                  = "Inbound"
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_port_range          = "*"
+        destination_port_range     = "22"
+        source_address_prefix      = "*"
+        destination_address_prefix = "*"
+    }
+
+    security_rule {
+        name                       = "HTTP"
         priority                   = 1002
         direction                  = "Inbound"
         access                     = "Allow"
         protocol                   = "Tcp"
         source_port_range          = "*"
-        destination_port_range     = "*"
+        destination_port_range     = "80"
         source_address_prefix      = "*"
         destination_address_prefix = "*"
     }
@@ -143,8 +155,8 @@ resource "azurerm_network_security_group" "k8s-control-plane_nsg" {
     tags = {}
 }
 
-resource "azurerm_network_interface" "k8s-control-plane" {
-  name                = "k8s-control-plane-nic"
+resource "azurerm_network_interface" "web" {
+  name                = "web-nic"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
@@ -152,21 +164,21 @@ resource "azurerm_network_interface" "k8s-control-plane" {
     name                          = "${var.net_prefix}-ipconfiguration"
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.k8s-control-plane_publicip.id
+    public_ip_address_id          = azurerm_public_ip.web_publicip.id
   }
 }
 
 # Connect the security group to the network interface
-resource "azurerm_network_interface_security_group_association" "k8s-control-plane" {
-    network_interface_id      = azurerm_network_interface.k8s-control-plane.id
-    network_security_group_id = azurerm_network_security_group.k8s-control-plane_nsg.id
+resource "azurerm_network_interface_security_group_association" "web" {
+    network_interface_id      = azurerm_network_interface.web.id
+    network_security_group_id = azurerm_network_security_group.web_nsg.id
 }
 
-resource "azurerm_virtual_machine" "k8s-control-plane" {
-  name                  = "k8s-control-plane"
+resource "azurerm_virtual_machine" "web" {
+  name                  = "web"
   location              = azurerm_resource_group.main.location
   resource_group_name   = azurerm_resource_group.main.name
-  network_interface_ids = [azurerm_network_interface.k8s-control-plane.id]
+  network_interface_ids = [azurerm_network_interface.web.id]
   vm_size               = var.vm_size
 
   delete_os_disk_on_termination = true
@@ -174,17 +186,17 @@ resource "azurerm_virtual_machine" "k8s-control-plane" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
+    sku       = "16.04-LTS"
     version   = "latest"
   }
   storage_os_disk {
-    name              = "k8s-control-plane-osdisk"
+    name              = "web-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
   os_profile {
-    computer_name  = "k8s-control-plane"
+    computer_name  = "web"
     admin_username = var.admin_username
     admin_password = var.admin_password
   }
@@ -194,19 +206,31 @@ resource "azurerm_virtual_machine" "k8s-control-plane" {
   tags = {}
 }
 
-resource "azurerm_network_security_group" "k8s-worker_nsg" {
-    name                = "k8s-worker-nsg"
+resource "azurerm_network_security_group" "db_nsg" {
+    name                = "db-nsg"
     location            = azurerm_resource_group.main.location
     resource_group_name = azurerm_resource_group.main.name
 
     security_rule {
-        name                       = "Allow_all_Internal"
+        name                       = "SSH"
         priority                   = 1001
         direction                  = "Inbound"
         access                     = "Allow"
         protocol                   = "Tcp"
         source_port_range          = "*"
-        destination_port_range     = "*"
+        destination_port_range     = "22"
+        source_address_prefix      = "*"
+        destination_address_prefix = "*"
+    }
+
+    security_rule {
+        name                       = "SQL"
+        priority                   = 1002
+        direction                  = "Inbound"
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_port_range          = "*"
+        destination_port_range     = "3306"
         source_address_prefix      = "*"
         destination_address_prefix = "*"
     }
@@ -215,8 +239,8 @@ resource "azurerm_network_security_group" "k8s-worker_nsg" {
 }
 
 
-resource "azurerm_network_interface" "k8s-worker" {
-  name                = "k8s-worker-nic"
+resource "azurerm_network_interface" "db" {
+  name                = "db-nic"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 
@@ -228,16 +252,16 @@ resource "azurerm_network_interface" "k8s-worker" {
 }
 
 # Connect the security group to the network interface
-resource "azurerm_network_interface_security_group_association" "k8s-worker" {
-    network_interface_id      = azurerm_network_interface.k8s-worker.id
-    network_security_group_id = azurerm_network_security_group.k8s-worker_nsg.id
+resource "azurerm_network_interface_security_group_association" "db" {
+    network_interface_id      = azurerm_network_interface.db.id
+    network_security_group_id = azurerm_network_security_group.db_nsg.id
 }
 
-resource "azurerm_virtual_machine" "k8s-worker" {
-  name                  = "k8s-worker"
+resource "azurerm_virtual_machine" "db" {
+  name                  = "db"
   location              = azurerm_resource_group.main.location
   resource_group_name   = azurerm_resource_group.main.name
-  network_interface_ids = [azurerm_network_interface.k8s-worker.id]
+  network_interface_ids = [azurerm_network_interface.db.id]
   vm_size               = var.vm_size
 
   delete_os_disk_on_termination = true
@@ -245,17 +269,17 @@ resource "azurerm_virtual_machine" "k8s-worker" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
+    sku       = "16.04-LTS"
     version   = "latest"
   }
   storage_os_disk {
-    name              = "k8s-worker-osdisk"
+    name              = "db-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
   os_profile {
-    computer_name  = "k8s-worker"
+    computer_name  = "db"
     admin_username = var.admin_username
     admin_password = var.admin_password
   }

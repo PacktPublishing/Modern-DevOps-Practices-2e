@@ -1,0 +1,54 @@
+---
+- hosts: dbservers
+  become: true
+  vars:
+    mysql_root_password: "Password@1"
+  tasks:
+  - name: Set the root password
+    mysql_user:
+      name: root
+      password: "{{ mysql_root_password }}"
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+  - name: Update the cnf file
+    copy:
+      src: client.my.cnf
+      dest: "/root/.my.cnf"
+      mode: 0600
+    notify:
+      - Restart MySQL
+  - name: Create a test user
+    mysql_user:
+      name: testuser
+      password: "Password@1"
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      state: present
+      priv: '*.*:ALL,GRANT'
+      host: '%'
+  - name: Remove all anonymous user accounts
+    mysql_user:
+      name: ''
+      host_all: yes
+      state: absent
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+    notify:
+    - Restart MySQL
+  - name: Remove the MySQL test database
+    mysql_db:
+      name: test
+      state: absent
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+    notify:
+    - Restart MySQL
+  - name: Change bind address
+    lineinfile:
+      path:  /etc/mysql/mysql.conf.d/mysqld.cnf
+      regexp: ^bind-address
+      line: 'bind-address            = 0.0.0.0'
+    notify:
+    - Restart MySQL
+  handlers:
+  - name: Restart MySQL
+    service: name=mysql state=restarted
