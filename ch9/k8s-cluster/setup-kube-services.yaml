@@ -1,0 +1,33 @@
+---
+- hosts: k8s-control-plane:k8s-worker
+  become: true
+  tasks:
+  - name: Remove current swaps from fstab
+    lineinfile:
+      dest: /etc/fstab
+      regexp: '(?i)^([^#][\S]+\s+(none|swap)\s+swap.*)'
+      line: '# \1'
+      backrefs: yes
+      state: present
+
+  - name: Disable system swap
+    shell: "swapoff -a"
+
+  - name: Ensure overlay is enabled
+    modprobe:
+      name: overlay
+      state: present
+  - name: Ensure br_netfilter is enabled.
+    modprobe:
+      name: br_netfilter
+      state: present
+  - name: Pass bridged IPv4 traffic to iptable's chains
+    sysctl:
+      name: "{{ item.name }}"
+      value: "{{ item.value }}"
+      state: present
+      reload: true
+    with_items:
+      - { name: 'net.bridge.bridge-nf-call-ip6tables', value: '1' }
+      - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
+      - { name: 'net.ipv4.ip_forward', value: '1' }

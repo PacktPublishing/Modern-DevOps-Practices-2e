@@ -1,6 +1,7 @@
 ---
 - import_playbook: apt-update.yaml
+- import_playbook: install-kube-services.yaml
+- import_playbook: setup-kube-services.yaml
 - import_playbook: install-containerd.yaml
 - import_playbook: setup-containerd.yaml
-- import_playbook: install-kube-services.yaml
 - import_playbook: setup-k8s-control-plane.yaml

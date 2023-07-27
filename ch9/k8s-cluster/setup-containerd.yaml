@@ -54,30 +54,6 @@
       state: absent
     changed_when: false
 
-  - name: Disable system swap
-    shell: "swapoff -a"
-
-  - name: Remove current swaps from fstab
-    lineinfile:
-      dest: /etc/fstab
-      regexp: '(?i)^([^#][\S]+\s+(none|swap)\s+swap.*)'
-      line: '# \1'
-      backrefs: yes
-      state: present
-
-  - name: Ensure br_netfilter is enabled.
-    modprobe:
-      name: br_netfilter
-      state: present
-  - name: Disable swappiness and pass bridged IPv4 traffic to iptable's chains
-    sysctl:
-      name: "{{ item.name }}"
-      value: "{{ item.value }}"
-      state: present
-    with_items:
-      - { name: 'vm.swappiness', value: '0' }
-      - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
-  
   - name: Ensure containerd is restarted immediately if necessary.
     meta: flush_handlers
 

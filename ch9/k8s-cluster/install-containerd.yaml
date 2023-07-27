@@ -8,7 +8,17 @@
         - apt-transport-https
         - ca-certificates
         - gnupg2
+        - curl
+        - software-properties-common
       state: present
+  - name: Configure persistent loading on containerd modules
+    copy:
+      dest: /etc/modules-load.d/containerd.conf
+      content: |
+        overlay
+        br_netfilter
+  - name: Sysctl reload
+    shell: "sysctl --system"
 
   - name: Add Docker apt key.
     apt_key:
@@ -17,15 +27,6 @@
       state: present
     register: add_repository_key
     ignore_errors: true
-
-  - name: Ensure curl is present (on older systems without SNI).
-    package: name=curl state=present
-    when: add_repository_key is failed
-
-  - name: Add Docker apt key (alternative for older systems without SNI).
-    shell: >
-      curl -sSL https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg | sudo apt-key add -
-    when: add_repository_key is failed
 
   - name: Add Docker repository.
     apt_repository:

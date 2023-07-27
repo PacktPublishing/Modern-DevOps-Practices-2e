@@ -35,3 +35,9 @@
     package:
       name: "kubectl"
       state: "present"
+
+  - name: Ensure kubelet is running
+    service:
+      name: "kubelet"
+      state: started
+      enabled: true
