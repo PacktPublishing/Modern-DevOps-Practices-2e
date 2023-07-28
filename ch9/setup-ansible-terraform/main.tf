@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "azurerm"
-      version = "=2.4.0"
+      version = "=3.55.0"
     }
   }
 }
@@ -30,7 +30,7 @@ resource "azurerm_subnet" "internal" {
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
-  address_prefix       = "10.0.2.0/24"
+  address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_public_ip" "control_node_publicip" {
@@ -83,6 +83,7 @@ resource "azurerm_network_interface_security_group_association" "control_node" {
 
 resource "azurerm_virtual_machine" "control_node" {
   name                  = "ansible-control-node"
+  depends_on            = [azurerm_virtual_machine.web, azurerm_virtual_machine.db]
   location              = azurerm_resource_group.main.location
   resource_group_name   = azurerm_resource_group.main.name
   network_interface_ids = [azurerm_network_interface.control_node.id]
@@ -93,7 +94,7 @@ resource "azurerm_virtual_machine" "control_node" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
   storage_os_disk {
@@ -106,10 +107,12 @@ resource "azurerm_virtual_machine" "control_node" {
     computer_name  = "ansible-control-node"
     admin_username = var.admin_username
     admin_password = var.admin_password
+    custom_data    = base64encode(data.template_file.control_node_init.rendered)
   }
   os_profile_linux_config {
     disable_password_authentication = false
   }
+
   tags = {}
 }
 
@@ -186,7 +189,7 @@ resource "azurerm_virtual_machine" "web" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
   storage_os_disk {
@@ -199,10 +202,12 @@ resource "azurerm_virtual_machine" "web" {
     computer_name  = "web"
     admin_username = var.admin_username
     admin_password = var.admin_password
+    custom_data    = base64encode(data.template_file.managed_nodes_init.rendered)
   }
   os_profile_linux_config {
     disable_password_authentication = false
   }
+
   tags = {}
 }
 
@@ -269,7 +274,7 @@ resource "azurerm_virtual_machine" "db" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
   storage_os_disk {
@@ -282,10 +287,26 @@ resource "azurerm_virtual_machine" "db" {
     computer_name  = "db"
     admin_username = var.admin_username
     admin_password = var.admin_password
+    custom_data    = base64encode(data.template_file.managed_nodes_init.rendered)
   }
   os_profile_linux_config {
     disable_password_authentication = false
   }
+
   tags = {}
+}
+
+data "template_file" "managed_nodes_init" {
+  template = file("managed-nodes-user-data.sh")
+  vars = {
+    admin_password = var.admin_password
+  }
+}
+
+data "template_file" "control_node_init" {
+  template = file("control-node-user-data.sh")
+  vars = {
+    admin_password = var.admin_password
+  }
 }
 
