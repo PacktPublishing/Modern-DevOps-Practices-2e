@@ -1,0 +1,244 @@
+azure-arm.dbserver: output will be in this color.
+azure-arm.webserver: output will be in this color.
+
+==> azure-arm.dbserver: Running builder ...
+==> azure-arm.dbserver: Getting tokens using client secret
+==> azure-arm.webserver: Running builder ...
+==> azure-arm.webserver: Getting tokens using client secret
+==> azure-arm.webserver: Getting tokens using client secret
+==> azure-arm.dbserver: Getting tokens using client secret
+    azure-arm.webserver: Creating Azure Resource Manager (ARM) client ...
+    azure-arm.dbserver: Creating Azure Resource Manager (ARM) client ...
+==> azure-arm.dbserver: Getting source image id for the deployment ...
+==> azure-arm.dbserver:  -> SourceImageName: '/subscriptions/1de491b5-f572-459b-a568-c4a35d5ac7a9/providers/Microsoft.Compute/locations/East US/publishers/Canonical/ArtifactTypes/vmimage/offers/UbuntuServer/skus/18.04-LTS/versions/latest'
+==> azure-arm.dbserver: Creating resource group ...
+==> azure-arm.dbserver:  -> ResourceGroupName : 'pkr-Resource-Group-11xqpuxsm3'
+==> azure-arm.dbserver:  -> Location          : 'East US'
+==> azure-arm.dbserver:  -> Tags              :
+==> azure-arm.webserver: the managed image named apache-webserver already exists, but deleting it due to -force flag
+==> azure-arm.dbserver: Validating deployment template ...
+==> azure-arm.dbserver:  -> ResourceGroupName : 'pkr-Resource-Group-11xqpuxsm3'
+==> azure-arm.dbserver:  -> DeploymentName    : 'pkrdp11xqpuxsm3'
+==> azure-arm.dbserver: Deploying deployment template ...
+==> azure-arm.dbserver:  -> ResourceGroupName : 'pkr-Resource-Group-11xqpuxsm3'
+==> azure-arm.dbserver:  -> DeploymentName    : 'pkrdp11xqpuxsm3'
+==> azure-arm.webserver: Getting source image id for the deployment ...
+==> azure-arm.webserver:  -> SourceImageName: '/subscriptions/1de491b5-f572-459b-a568-c4a35d5ac7a9/providers/Microsoft.Compute/locations/East US/publishers/Canonical/ArtifactTypes/vmimage/offers/UbuntuServer/skus/18.04-LTS/versions/latest'
+==> azure-arm.webserver: Creating resource group ...
+==> azure-arm.webserver:  -> ResourceGroupName : 'pkr-Resource-Group-7dfj1c2iej'
+==> azure-arm.webserver:  -> Location          : 'East US'
+==> azure-arm.webserver:  -> Tags              :
+==> azure-arm.webserver: Validating deployment template ...
+==> azure-arm.webserver:  -> ResourceGroupName : 'pkr-Resource-Group-7dfj1c2iej'
+==> azure-arm.webserver:  -> DeploymentName    : 'pkrdp7dfj1c2iej'
+==> azure-arm.webserver: Deploying deployment template ...
+==> azure-arm.webserver:  -> ResourceGroupName : 'pkr-Resource-Group-7dfj1c2iej'
+==> azure-arm.webserver:  -> DeploymentName    : 'pkrdp7dfj1c2iej'
+==> azure-arm.dbserver: Getting the VM's IP address ...
+==> azure-arm.dbserver:  -> ResourceGroupName   : 'pkr-Resource-Group-11xqpuxsm3'
+==> azure-arm.dbserver:  -> PublicIPAddressName : 'pkrip11xqpuxsm3'
+==> azure-arm.dbserver:  -> NicName             : 'pkrni11xqpuxsm3'
+==> azure-arm.dbserver:  -> Network Connection  : 'PublicEndpoint'
+==> azure-arm.dbserver:  -> IP Address          : '40.114.7.11'
+==> azure-arm.dbserver: Waiting for SSH to become available...
+==> azure-arm.dbserver: Connected to SSH!
+==> azure-arm.dbserver: Provisioning with Ansible...
+    azure-arm.dbserver: Setting up proxy adapter for Ansible....
+==> azure-arm.dbserver: Executing Ansible: ansible-playbook -e packer_build_name="dbserver" -e packer_builder_type=azure-arm --ssh-extra-args '-o IdentitiesOnly=yes' -e ansible_ssh_private_key_file=/tmp/ansible-key906086565 -i /tmp/packer-provisioner-ansible3847259155 /home/cloud_user/Modern-DevOps-Practices-2e/ch10/ansible/dbserver-playbook.yaml
+    azure-arm.dbserver: [DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks
+    azure-arm.dbserver: instead. See https://docs.ansible.com/ansible-
+    azure-arm.dbserver: core/2.15/user_guide/playbooks_reuse_includes.html for details. This feature
+    azure-arm.dbserver: will be removed in version 2.16. Deprecation warnings can be disabled by
+    azure-arm.dbserver: setting deprecation_warnings=False in ansible.cfg.
+    azure-arm.dbserver:
+    azure-arm.dbserver: PLAY [default] *****************************************************************
+    azure-arm.dbserver:
+    azure-arm.dbserver: TASK [Gathering Facts] *********************************************************
+    azure-arm.dbserver: ok: [default]
+    azure-arm.dbserver:
+    azure-arm.dbserver: TASK [common : Update apt packages] ********************************************
+    azure-arm.dbserver: changed: [default]
+    azure-arm.dbserver:
+    azure-arm.dbserver: TASK [mysql : Install packages] ************************************************
+==> azure-arm.webserver: Getting the VM's IP address ...
+==> azure-arm.webserver:  -> ResourceGroupName   : 'pkr-Resource-Group-7dfj1c2iej'
+==> azure-arm.webserver:  -> PublicIPAddressName : 'pkrip7dfj1c2iej'
+==> azure-arm.webserver:  -> NicName             : 'pkrni7dfj1c2iej'
+==> azure-arm.webserver:  -> Network Connection  : 'PublicEndpoint'
+==> azure-arm.webserver:  -> IP Address          : '104.41.158.85'
+==> azure-arm.webserver: Waiting for SSH to become available...
+==> azure-arm.webserver: Connected to SSH!
+==> azure-arm.webserver: Provisioning with Ansible...
+    azure-arm.webserver: Setting up proxy adapter for Ansible....
+==> azure-arm.webserver: Executing Ansible: ansible-playbook -e packer_build_name="webserver" -e packer_builder_type=azure-arm --ssh-extra-args '-o IdentitiesOnly=yes' -e ansible_ssh_private_key_file=/tmp/ansible-key328774773 -i /tmp/packer-provisioner-ansible747322992 /home/cloud_user/Modern-DevOps-Practices-2e/ch10/ansible/webserver-playbook.yaml
+    azure-arm.webserver: [DEPRECATION WARNING]: "include" is deprecated, use include_tasks/import_tasks
+    azure-arm.webserver: instead. See https://docs.ansible.com/ansible-
+    azure-arm.webserver: core/2.15/user_guide/playbooks_reuse_includes.html for details. This feature
+    azure-arm.webserver: will be removed in version 2.16. Deprecation warnings can be disabled by
+    azure-arm.webserver: setting deprecation_warnings=False in ansible.cfg.
+    azure-arm.webserver:
+    azure-arm.webserver: PLAY [default] *****************************************************************
+    azure-arm.webserver:
+    azure-arm.webserver: TASK [Gathering Facts] *********************************************************
+    azure-arm.webserver: ok: [default]
+    azure-arm.webserver:
+    azure-arm.webserver: TASK [common : Update apt packages] ********************************************
+    azure-arm.webserver: changed: [default]
+    azure-arm.webserver:
+    azure-arm.webserver: TASK [apache : Install packages] ***********************************************
+    azure-arm.dbserver: changed: [default]
+    azure-arm.dbserver:
+    azure-arm.dbserver: TASK [mysql : Start and enable MySQL service] **********************************
+    azure-arm.dbserver: ok: [default]
+    azure-arm.dbserver:
+    azure-arm.dbserver: TASK [mysql : Set the root password] *******************************************
+    azure-arm.dbserver: changed: [default]
+    azure-arm.dbserver:
+    azure-arm.dbserver: TASK [mysql : Update the cnf file] *********************************************
+    azure-arm.dbserver: changed: [default]
+    azure-arm.dbserver:
+    azure-arm.dbserver: TASK [mysql : Create a test user] **********************************************
+    azure-arm.dbserver: changed: [default]
+    azure-arm.dbserver:
+    azure-arm.dbserver: TASK [mysql : Remove all anonymous user accounts] ******************************
+    azure-arm.dbserver: ok: [default]
+    azure-arm.dbserver:
+    azure-arm.dbserver: TASK [mysql : Remove the MySQL test database] **********************************
+    azure-arm.dbserver: ok: [default]
+    azure-arm.dbserver:
+    azure-arm.dbserver: TASK [mysql : Change bind address] *********************************************
+    azure-arm.dbserver: changed: [default]
+    azure-arm.dbserver:
+    azure-arm.dbserver: RUNNING HANDLER [mysql : Restart MySQL] ****************************************
+    azure-arm.webserver: changed: [default]
+    azure-arm.webserver:
+    azure-arm.webserver: TASK [apache : Start and Enable Apache service] ********************************
+    azure-arm.webserver: ok: [default]
+    azure-arm.webserver:
+    azure-arm.webserver: TASK [apache : Delete index.html file] *****************************************
+    azure-arm.dbserver: changed: [default]
+    azure-arm.dbserver:
+    azure-arm.dbserver: PLAY RECAP *********************************************************************
+    azure-arm.dbserver: default                    : ok=11   changed=7    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+    azure-arm.dbserver:
+==> azure-arm.dbserver: Querying the machine's properties ...
+==> azure-arm.dbserver:  -> ResourceGroupName : 'pkr-Resource-Group-11xqpuxsm3'
+==> azure-arm.dbserver:  -> ComputeName       : 'pkrvm11xqpuxsm3'
+==> azure-arm.dbserver:  -> Managed OS Disk   : '/subscriptions/1de491b5-f572-459b-a568-c4a35d5ac7a9/resourceGroups/pkr-Resource-Group-11xqpuxsm3/providers/Microsoft.Compute/disks/pkros11xqpuxsm3'
+==> azure-arm.dbserver: Querying the machine's additional disks properties ...
+==> azure-arm.dbserver:  -> ResourceGroupName : 'pkr-Resource-Group-11xqpuxsm3'
+==> azure-arm.dbserver:  -> ComputeName       : 'pkrvm11xqpuxsm3'
+==> azure-arm.dbserver: Powering off machine ...
+==> azure-arm.dbserver:  -> ResourceGroupName : 'pkr-Resource-Group-11xqpuxsm3'
+==> azure-arm.dbserver:  -> ComputeName       : 'pkrvm11xqpuxsm3'
+    azure-arm.webserver: changed: [default]
+    azure-arm.webserver:
+    azure-arm.webserver: TASK [apache : Upload application file] ****************************************
+    azure-arm.webserver: changed: [default]
+    azure-arm.webserver:
+    azure-arm.webserver: RUNNING HANDLER [apache : Restart Apache] **************************************
+    azure-arm.webserver: changed: [default]
+    azure-arm.webserver:
+    azure-arm.webserver: PLAY RECAP *********************************************************************
+    azure-arm.webserver: default                    : ok=7    changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+    azure-arm.webserver:
+==> azure-arm.webserver: Querying the machine's properties ...
+==> azure-arm.webserver:  -> ResourceGroupName : 'pkr-Resource-Group-7dfj1c2iej'
+==> azure-arm.webserver:  -> ComputeName       : 'pkrvm7dfj1c2iej'
+==> azure-arm.webserver:  -> Managed OS Disk   : '/subscriptions/1de491b5-f572-459b-a568-c4a35d5ac7a9/resourceGroups/pkr-Resource-Group-7dfj1c2iej/providers/Microsoft.Compute/disks/pkros7dfj1c2iej'
+==> azure-arm.webserver: Querying the machine's additional disks properties ...
+==> azure-arm.webserver:  -> ResourceGroupName : 'pkr-Resource-Group-7dfj1c2iej'
+==> azure-arm.webserver:  -> ComputeName       : 'pkrvm7dfj1c2iej'
+==> azure-arm.webserver: Powering off machine ...
+==> azure-arm.webserver:  -> ResourceGroupName : 'pkr-Resource-Group-7dfj1c2iej'
+==> azure-arm.webserver:  -> ComputeName       : 'pkrvm7dfj1c2iej'
+==> azure-arm.dbserver:  -> Compute ResourceGroupName : 'pkr-Resource-Group-11xqpuxsm3'
+==> azure-arm.dbserver:  -> Compute Name              : 'pkrvm11xqpuxsm3'
+==> azure-arm.dbserver:  -> Compute Location          : 'East US'
+==> azure-arm.dbserver: Generalizing machine ...
+==> azure-arm.dbserver: Capturing image ...
+==> azure-arm.dbserver:  -> Image ResourceGroupName   : 'packer-rg'
+==> azure-arm.dbserver:  -> Image Name                : 'mysql-dbserver'
+==> azure-arm.dbserver:  -> Image Location            : 'East US'
+==> azure-arm.webserver:  -> Compute ResourceGroupName : 'pkr-Resource-Group-7dfj1c2iej'
+==> azure-arm.webserver:  -> Compute Name              : 'pkrvm7dfj1c2iej'
+==> azure-arm.webserver:  -> Compute Location          : 'East US'
+==> azure-arm.webserver: Generalizing machine ...
+==> azure-arm.webserver: Capturing image ...
+==> azure-arm.webserver:  -> Image ResourceGroupName   : 'packer-rg'
+==> azure-arm.webserver:  -> Image Name                : 'apache-webserver'
+==> azure-arm.webserver:  -> Image Location            : 'East US'
+==> azure-arm.dbserver:
+==> azure-arm.dbserver: Deleting Virtual Machine deployment and its attatched resources...
+==> azure-arm.dbserver: Adding to deletion queue -> Microsoft.Compute/virtualMachines : 'pkrvm11xqpuxsm3'
+==> azure-arm.dbserver: Adding to deletion queue -> Microsoft.Network/networkInterfaces : 'pkrni11xqpuxsm3'
+==> azure-arm.dbserver: Adding to deletion queue -> Microsoft.Network/virtualNetworks : 'pkrvn11xqpuxsm3'
+==> azure-arm.dbserver: Adding to deletion queue -> Microsoft.Network/publicIPAddresses : 'pkrip11xqpuxsm3'
+==> azure-arm.dbserver: Attempting deletion -> Microsoft.Network/publicIPAddresses : 'pkrip11xqpuxsm3'
+==> azure-arm.dbserver: Waiting for deletion of all resources...
+==> azure-arm.dbserver: Attempting deletion -> Microsoft.Compute/virtualMachines : 'pkrvm11xqpuxsm3'
+==> azure-arm.dbserver: Attempting deletion -> Microsoft.Network/networkInterfaces : 'pkrni11xqpuxsm3'
+==> azure-arm.dbserver: Attempting deletion -> Microsoft.Network/virtualNetworks : 'pkrvn11xqpuxsm3'
+==> azure-arm.dbserver: Couldn't delete Microsoft.Network/publicIPAddresses resource. Will retry.
+==> azure-arm.dbserver: Name: pkrip11xqpuxsm3
+==> azure-arm.dbserver: Couldn't delete Microsoft.Network/networkInterfaces resource. Will retry.
+==> azure-arm.dbserver: Name: pkrni11xqpuxsm3
+==> azure-arm.dbserver: Couldn't delete Microsoft.Network/virtualNetworks resource. Will retry.
+==> azure-arm.dbserver: Name: pkrvn11xqpuxsm3
+==> azure-arm.dbserver: Attempting deletion -> Microsoft.Network/publicIPAddresses : 'pkrip11xqpuxsm3'
+==> azure-arm.dbserver: Attempting deletion -> Microsoft.Network/networkInterfaces : 'pkrni11xqpuxsm3'
+==> azure-arm.dbserver: Attempting deletion -> Microsoft.Network/virtualNetworks : 'pkrvn11xqpuxsm3'
+==> azure-arm.dbserver: Couldn't delete Microsoft.Network/publicIPAddresses resource. Will retry.
+==> azure-arm.dbserver: Name: pkrip11xqpuxsm3
+==> azure-arm.dbserver: Couldn't delete Microsoft.Network/virtualNetworks resource. Will retry.
+==> azure-arm.dbserver: Name: pkrvn11xqpuxsm3
+==> azure-arm.webserver:
+==> azure-arm.webserver: Deleting Virtual Machine deployment and its attatched resources...
+==> azure-arm.webserver: Adding to deletion queue -> Microsoft.Compute/virtualMachines : 'pkrvm7dfj1c2iej'
+==> azure-arm.webserver: Adding to deletion queue -> Microsoft.Network/networkInterfaces : 'pkrni7dfj1c2iej'
+==> azure-arm.webserver: Adding to deletion queue -> Microsoft.Network/virtualNetworks : 'pkrvn7dfj1c2iej'
+==> azure-arm.webserver: Adding to deletion queue -> Microsoft.Network/publicIPAddresses : 'pkrip7dfj1c2iej'
+==> azure-arm.webserver: Attempting deletion -> Microsoft.Network/networkInterfaces : 'pkrni7dfj1c2iej'
+==> azure-arm.webserver: Waiting for deletion of all resources...
+==> azure-arm.webserver: Attempting deletion -> Microsoft.Network/virtualNetworks : 'pkrvn7dfj1c2iej'
+==> azure-arm.webserver: Attempting deletion -> Microsoft.Network/publicIPAddresses : 'pkrip7dfj1c2iej'
+==> azure-arm.webserver: Attempting deletion -> Microsoft.Compute/virtualMachines : 'pkrvm7dfj1c2iej'
+==> azure-arm.webserver: Couldn't delete Microsoft.Network/virtualNetworks resource. Will retry.
+==> azure-arm.webserver: Name: pkrvn7dfj1c2iej
+==> azure-arm.webserver: Couldn't delete Microsoft.Network/publicIPAddresses resource. Will retry.
+==> azure-arm.webserver: Name: pkrip7dfj1c2iej
+==> azure-arm.webserver: Attempting deletion -> Microsoft.Network/virtualNetworks : 'pkrvn7dfj1c2iej'
+==> azure-arm.webserver: Attempting deletion -> Microsoft.Network/publicIPAddresses : 'pkrip7dfj1c2iej'
+==> azure-arm.dbserver: Attempting deletion -> Microsoft.Network/publicIPAddresses : 'pkrip11xqpuxsm3'
+==> azure-arm.dbserver: Attempting deletion -> Microsoft.Network/virtualNetworks : 'pkrvn11xqpuxsm3'
+==> azure-arm.webserver:  Deleting -> Microsoft.Compute/disks : '/subscriptions/1de491b5-f572-459b-a568-c4a35d5ac7a9/resourceGroups/pkr-Resource-Group-7dfj1c2iej/providers/Microsoft.Compute/disks/pkros7dfj1c2iej'
+==> azure-arm.dbserver:  Deleting -> Microsoft.Compute/disks : '/subscriptions/1de491b5-f572-459b-a568-c4a35d5ac7a9/resourceGroups/pkr-Resource-Group-11xqpuxsm3/providers/Microsoft.Compute/disks/pkros11xqpuxsm3'
+==> azure-arm.dbserver: Removing the created Deployment object: 'pkrdp11xqpuxsm3'
+==> azure-arm.dbserver:
+==> azure-arm.dbserver: Cleanup requested, deleting resource group ...
+==> azure-arm.webserver: Removing the created Deployment object: 'pkrdp7dfj1c2iej'
+==> azure-arm.webserver:
+==> azure-arm.webserver: Cleanup requested, deleting resource group ...
+==> azure-arm.dbserver: Resource group has been deleted.
+Build 'azure-arm.dbserver' finished after 7 minutes 3 seconds.
+==> azure-arm.webserver: Resource group has been deleted.
+Build 'azure-arm.webserver' finished after 7 minutes 26 seconds.
+
+==> Wait completed after 7 minutes 26 seconds
+
+==> Builds finished. The artifacts of successful builds are:
+--> azure-arm.dbserver: Azure.ResourceManagement.VMImage:
+
+OSType: Linux
+ManagedImageResourceGroupName: packer-rg
+ManagedImageName: mysql-dbserver
+ManagedImageId: /subscriptions/1de491b5-f572-459b-a568-c4a35d5ac7a9/resourceGroups/packer-rg/providers/Microsoft.Compute/images/mysql-dbserver
+ManagedImageLocation: East US
+
+--> azure-arm.webserver: Azure.ResourceManagement.VMImage:
+
+OSType: Linux
+ManagedImageResourceGroupName: packer-rg
+ManagedImageName: apache-webserver
+ManagedImageId: /subscriptions/1de491b5-f572-459b-a568-c4a35d5ac7a9/resourceGroups/packer-rg/providers/Microsoft.Compute/images/apache-webserver
+ManagedImageLocation: East US
