@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:6-jammy
+    ports:
+      - '27017:27017'
+    volumes:
+      - dbdata6:/data/db
+  posts:
+    image: bharamicrosystems/posts
+    ports:
+      - '5000:5000'   
+  reviews:
+    image: bharamicrosystems/reviews
+    ports:
+      - '5001:5000'
+  ratings:
+    image: bharamicrosystems/ratings
+    ports:
+      - '5002:5000'
+volumes:
+  dbdata6:

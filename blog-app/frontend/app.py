@@ -2,9 +2,9 @@ from flask import Flask, render_template, request, jsonify
 import requests
 
 app = Flask(__name__)
-blog_service_url = 'http://localhost:5000'
-reviews_service_url = 'http://localhost:5001'
-ratings_service_url = 'http://localhost:5002'
+posts_service_url = 'http://posts:5000'
+reviews_service_url = 'http://reviews:5000'
+ratings_service_url = 'http://ratings:5000'
 
 @app.route('/')
 def index():
@@ -12,13 +12,13 @@ def index():
 
 @app.route('/posts')
 def get_all_posts():
-    response = requests.get(f'{blog_service_url}/posts')
+    response = requests.get(f'{posts_service_url}/posts')
     posts = response.json().get('posts', [])
     return render_template('posts.html', posts=posts)
 
-@app.route('/posts/<int:post_id>')
+@app.route('/posts/<post_id>')
 def get_post(post_id):
-    response = requests.get(f'{blog_service_url}/posts/{post_id}')
+    response = requests.get(f'{posts_service_url}/posts/{post_id}')
     post = response.json().get('post')
     if post:
         review_response = requests.get(f'{reviews_service_url}/posts/{post_id}/reviews')
@@ -29,7 +29,7 @@ def get_post(post_id):
     else:
         return render_template('error.html', message='Post not found'), 404
 
-@app.route('/posts/<int:post_id>/reviews', methods=['POST'])
+@app.route('/posts/<post_id>/reviews', methods=['POST'])
 def add_review(post_id):
     review = request.form.get('review')
     rating = request.form.get('rating')
