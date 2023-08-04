@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microservices Blog - {{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <h2>Update Review:</h2>
+    <form action="/posts/{{ post._id }}/reviews/{{ review._id }}" method="POST">
+	<textarea name="review" placeholder="Enter your review">{{ review.review  }}</textarea><br>
+	<input type="number" name="rating" placeholder="Enter your rating (1-5)"  value="{{ review.rating  }}" ><br>
+        <input type="submit" value="Update Review">
+    </form>
+</body>
+</html>
+

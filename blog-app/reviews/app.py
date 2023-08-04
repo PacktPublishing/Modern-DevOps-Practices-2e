@@ -31,7 +31,7 @@ def delete_rating(review_id):
     try:
         res = requests.delete(f'{ratings_service_url}/review/{review_id}/rating')
         if res.status_code == 200:
-            return res.json()['rating']
+            return 0
     except Exception as e:
         print("Exception: ", e, flush=True)
         return None
@@ -74,6 +74,19 @@ def get_reviews(post_id):
         review['rating'] = rating
       reviews.append(review)
     return jsonify({'reviews': reviews})
+
+@app.route('/posts/<post_id>/reviews/<review_id>', methods=['GET'])
+def get_review(post_id, review_id):
+    review = collection.find_one({'_id': ObjectId(review_id)})
+    if review:
+        review['_id'] = str(review['_id'])
+        # Get rating of the review
+        rating = get_rating(review['_id'])
+        if rating:
+          review['rating'] = rating
+        return jsonify({'review': review})
+    else:
+        return jsonify({'error': 'Review not found'}), 404
 
 @app.route('/posts/<post_id>/reviews/<review_id>', methods=['PUT'])
 def update_review(post_id, review_id):

@@ -13,7 +13,7 @@ def index():
 @app.route('/posts')
 def get_all_posts():
     response = requests.get(f'{posts_service_url}/posts')
-    posts = response.json().get('posts', [])
+    posts = response.json()
     return render_template('posts.html', posts=posts)
 
 @app.route('/posts/<post_id>')
@@ -23,9 +23,7 @@ def get_post(post_id):
     if post:
         review_response = requests.get(f'{reviews_service_url}/posts/{post_id}/reviews')
         reviews = review_response.json().get('reviews', [])
-        rating_response = requests.get(f'{ratings_service_url}/posts/{post_id}/ratings')
-        rating = rating_response.json().get('rating')
-        return render_template('post.html', post=post, reviews=reviews, rating=rating)
+        return render_template('post.html', post=post, reviews=reviews)
     else:
         return render_template('error.html', message='Post not found'), 404
 
@@ -33,9 +31,31 @@ def get_post(post_id):
 def add_review(post_id):
     review = request.form.get('review')
     rating = request.form.get('rating')
-    requests.post(f'{reviews_service_url}/posts/{post_id}/reviews', json={'review': review})
-    requests.post(f'{ratings_service_url}/posts/{post_id}/ratings', json={'rating': rating})
-    return jsonify({'success': True})
+    requests.post(f'{reviews_service_url}/posts/{post_id}/reviews', json={'review': review, 'rating': rating})
+    return get_post(post_id)
+
+@app.route('/posts/<post_id>/reviews/<review_id>', methods=['POST'])
+def update_review(post_id, review_id):
+    review = request.form.get('review')
+    rating = request.form.get('rating')
+    requests.put(f'{reviews_service_url}/posts/{post_id}/reviews/{review_id}', json={'review': review, 'rating': rating})
+    return get_post(post_id)
+
+@app.route('/posts/<post_id>/reviews/<review_id>')
+def update_or_delete_review(post_id, review_id):
+    action = request.args.get('action')
+    if action == "delete":
+        requests.delete(f'{reviews_service_url}/posts/{post_id}/reviews/{review_id}')
+        return get_post(post_id)
+    elif action == "update":
+        response = requests.get(f'{posts_service_url}/posts/{post_id}')
+        post = response.json().get('post')
+        if post:
+            review_response = requests.get(f'{reviews_service_url}/posts/{post_id}/reviews/{review_id}')
+            review = review_response.json().get('review', {})
+            return render_template('update_review.html', post=post, review=review)
+        else:
+            return render_template('error.html', message='Review not found'), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

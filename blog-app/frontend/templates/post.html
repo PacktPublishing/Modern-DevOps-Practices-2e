@@ -7,14 +7,17 @@
     <h1>{{ post.title }}</h1>
     <p>{{ post.content }}</p>
     <h2>Reviews:</h2>
-    <ul>
+    <div>
         {% for review in reviews %}
-            <li>{{ review }}</li>
+            <div>
+		    <h4> Rated: {{ review.rating }} </h4>
+		    <p>{{ review.review }} <a href="/posts/{{ post._id }}/reviews/{{ review._id  }}?action=delete">Delete</a>
+		    <a href="/posts/{{ post._id }}/reviews/{{ review._id  }}?action=update">Update</a></p>
+	    </div>
         {% endfor %}
-    </ul>
-    <h2>Rating: {{ rating }}</h2>
+    </div>
     <h2>Add a Review:</h2>
-    <form action="/posts/{{ post.id }}/reviews" method="POST">
+    <form action="/posts/{{ post._id }}/reviews" method="POST">
         <textarea name="review" placeholder="Enter your review"></textarea><br>
         <input type="number" name="rating" placeholder="Enter your rating (1-5)"><br>
         <input type="submit" value="Add Review">

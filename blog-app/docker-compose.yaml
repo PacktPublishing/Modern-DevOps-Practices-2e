@@ -18,5 +18,9 @@ services:
     image: bharamicrosystems/ratings
     ports:
       - '5002:5000'
+  frontend:
+    image: bharamicrosystems/frontend
+    ports:
+      - '8080:5000'
 volumes:
   dbdata6:
