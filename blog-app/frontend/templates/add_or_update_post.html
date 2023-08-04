@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microservices Blog</title>
+<head>
+    <title>Microservices Blog</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container-fluid">
+<div class="row">
+    <div class="col-md-12">
+    {% if post is defined %}    
+    <h2>Update Post</h2>
+    <form action="/posts/{{ post._id }}/update" method="POST">
+	<input name="title" type="text" placeholder="Enter your title" value="{{ post.title }}"><br>
+	<textarea name="content" placeholder="Enter your content">{{ post.content  }}</textarea><br>
+        <input type="submit" value="Update Review">
+    </form>
+    {% else %}
+        <h2>Add Post</h2>
+    <form action="/posts" method="POST">
+        <input name="title" type="text" placeholder="Enter your title"><br>
+        <textarea name="content" placeholder="Enter your content"></textarea><br>
+        <input type="submit" value="Update Review">
+    </form>
+    {% endif %}
+    </div>
+</div>
+</div>
+</body>
+</html>
+

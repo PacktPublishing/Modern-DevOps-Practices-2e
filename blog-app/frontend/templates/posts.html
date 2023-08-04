@@ -8,6 +8,8 @@
     {% for post in posts %}
         <h2><a href="/posts/{{ post._id }}">{{ post.title }}</a></h2>
         <p>{{ post.content }}</p>
+	<a href="/posts/{{ post._id }}/update">Update</a>
+	<a href="/posts/{{ post._id }}/delete">Delete</a>
     {% endfor %}
 </body>
 </html>

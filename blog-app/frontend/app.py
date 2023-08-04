@@ -27,6 +27,39 @@ def get_post(post_id):
     else:
         return render_template('error.html', message='Post not found'), 404
 
+@app.route('/posts/<post_id>/update')
+def update_post_redirect(post_id):
+    response = requests.get(f'{posts_service_url}/posts/{post_id}')
+    post = response.json().get('post')
+    if post:
+        review_response = requests.get(f'{reviews_service_url}/posts/{post_id}/reviews')
+        return render_template('add_or_update_post.html', post=post)
+    else:
+        return render_template('error.html', message='Post not found'), 404
+
+@app.route('/posts/<post_id>/update', methods=['POST'])
+def update_post(post_id):
+    title = request.form.get('title')
+    content = request.form.get('content')
+    requests.put(f'{posts_service_url}/posts/{post_id}', json={'title': title, 'content': content})
+    return get_post(post_id)
+
+@app.route('/posts/add')
+def add_post_redirect():
+    return render_template('add_or_update_post.html')
+
+@app.route('/posts', methods=['POST'])
+def add_post():
+    title = request.form.get('title')
+    content = request.form.get('content')
+    response = requests.post(f'{posts_service_url}/posts', json={'title': title, 'content': content})
+    return get_post(response.json().get("post"))
+
+@app.route('/posts/<post_id>/delete')
+def delete_post(post_id):
+    requests.delete(f'{posts_service_url}/posts/{post_id}')
+    return get_all_posts()
+
 @app.route('/posts/<post_id>/reviews', methods=['POST'])
 def add_review(post_id):
     review = request.form.get('review')

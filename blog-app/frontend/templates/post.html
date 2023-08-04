@@ -2,26 +2,50 @@
 <html>
 <head>
     <title>Microservices Blog - {{ post.title }}</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>{{ post.title }}</h1>
+<div class="container-fluid">
+<div class="row">
+    <div class="col-md-12">
+     <h2>{{ post.title }}</h2>
     <p>{{ post.content }}</p>
-    <h2>Reviews:</h2>
-    <div>
-        {% for review in reviews %}
-            <div>
-		    <h4> Rated: {{ review.rating }} </h4>
-		    <p>{{ review.review }} <a href="/posts/{{ post._id }}/reviews/{{ review._id  }}?action=delete">Delete</a>
-		    <a href="/posts/{{ post._id }}/reviews/{{ review._id  }}?action=update">Update</a></p>
-	    </div>
-        {% endfor %}
     </div>
-    <h2>Add a Review:</h2>
+</div>
+<div class="row">
+    <div class="col-md-12">
+    <h3>Reviews:</h3>
+    </div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+        {% for review in reviews %}
+	<blockquote>
+            <p>{{ review.review }} <a href="/posts/{{ post._id }}/reviews/{{ review._id  }}?action=delete">Delete</a>
+                    <a href="/posts/{{ post._id }}/reviews/{{ review._id  }}?action=update">Update</a></p>
+	    <font color="orange">
+          	{% for n in range(review.rating) %}
+          		<span class="glyphicon glyphicon-star"></span>
+          	{% endfor %}
+          	{% for n in range(5 - review.rating) %}
+          		<span class="glyphicon glyphicon-star-empty"></span>
+          	{% endfor %}
+            </font>
+	 </blockquote>
+        {% endfor %}
+        </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+    <h3>Add a Review:</h3>
     <form action="/posts/{{ post._id }}/reviews" method="POST">
         <textarea name="review" placeholder="Enter your review"></textarea><br>
-        <input type="number" name="rating" placeholder="Enter your rating (1-5)"><br>
+        Rating: <input type="number" name="rating" value="5" min="1" max="5"><br>
         <input type="submit" value="Add Review">
     </form>
+    </div>
+</div>
+</div>
 </body>
 </html>
 
