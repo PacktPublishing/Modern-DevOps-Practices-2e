@@ -123,7 +123,7 @@ def update_review(post_id, review_id):
 def delete_review(post_id, review_id):
     rating = delete_rating(review_id)
     if rating is None:
-        return jsonify({'error': 'Error deleting rating', 'trace': delete_rating_resp.json()}), delete_rating_resp.status_code
+        return jsonify({'error': 'Error deleting rating'}), 500
     try:
         result = collection.delete_one({'_id': ObjectId(review_id)})
         return jsonify({'deleted': result.deleted_count})
