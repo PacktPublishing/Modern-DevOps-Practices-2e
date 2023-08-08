@@ -1,52 +1,55 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>My Blog</title>
-    <!-- Bootstrap -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/star-rating.min.css" />
 </head>
+
 <body>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/static/bootstrap/js/jquery.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/js/star-rating.min.js"></script>
-<div class="container-fluid">
-{% include 'navbar.html' %}
-<div class="row">
-    <div class="col-md-12">
-    {% if post is defined %}
-    <form action="/posts/{{ post._id }}/update" method="POST">
-       <div class="form-group">
-        <label for="title">Title</label>
-	<input name="title" id="title" placeholder="Enter your title" class="form-control" value="{{ post.title  }}">
-       </div>
-       <div class="form-group">
-        <label for="content">Content</label>
-	<textarea name="content" id="content" placeholder="Enter content here..." class="form-control">{{ post.content }}</textarea>
-       </div>
-       <button type="submit" class="btn btn-default">Submit</button>
-    </form>
-    {% else %}
-    <form action="/posts" method="POST">
-       <div class="form-group">
-        <label for="title">Title</label>
-        <input name="title" id="title" placeholder="Enter your title" class="form-control">
-       </div>
-       <div class="form-group">
-        <label for="content">Content</label>
-        <textarea name="content" id="content" placeholder="Enter content here..." class="form-control"></textarea>
-       </div>
-       <button type="submit" class="btn btn-default">Submit</button>
-    </form>
-    {% endif %}
+    <div class="container-fluid">
+        {% include 'navbar.html' %}
+        <div class="row">
+            <div class="col-md-12">
+                {% if post is defined %}
+                <form action="/posts/{{ post._id }}/update" method="POST">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input name="title" id="title" placeholder="Enter your title" class="form-control"
+                            value="{{ post.title  }}" type="text" minlength="8" maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Content</label>
+                        <textarea name="content" id="content" placeholder="Enter content here..." class="form-control"
+                            minlength="8" required>{{ post.content }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                {% else %}
+                <form action="/posts" method="POST">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input name="title" id="title" placeholder="Enter your title" class="form-control" type="text"
+                            minlength="8" maxlength="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Content</label>
+                        <textarea name="content" id="content" placeholder="Enter content here..." class="form-control"
+                            minlength="8" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
     </div>
-</div>
-</div>
 </body>
+
 </html>

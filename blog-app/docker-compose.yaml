@@ -8,18 +8,27 @@ services:
       - dbdata6:/data/db
   posts:
     image: bharamicrosystems/posts
+    build: ./posts
     ports:
       - '5000:5000'   
   reviews:
     image: bharamicrosystems/reviews
+    build: ./reviews
     ports:
       - '5001:5000'
   ratings:
     image: bharamicrosystems/ratings
+    build: ./ratings
     ports:
       - '5002:5000'
+  users:
+    image: bharamicrosystems/users
+    build: ./users
+    ports:
+      - '5003:5000'
   frontend:
     image: bharamicrosystems/frontend
+    build: ./frontend
     ports:
       - '8080:5000'
 volumes:
