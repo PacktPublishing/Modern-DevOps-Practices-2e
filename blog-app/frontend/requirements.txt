@@ -2,4 +2,4 @@ flask
 requests
 Flask-Session
 flask-bcrypt
-pytest
+requests_mock
