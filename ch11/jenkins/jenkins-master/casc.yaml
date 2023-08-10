@@ -1,5 +1,5 @@
 jenkins:
-  systemMessage: "Configuring Jenkins using Jenkins CaC\n\n"
+  systemMessage: "Configuring Jenkins using Jenkins CasC"
   remotingSecurity:
    enabled: true
   securityRealm:
@@ -16,5 +16,3 @@ jenkins:
 unclassified:
   location:
     url: http://127.0.0.1:8080/
-jobs:
-  - file: /usr/local/mdo-posts.groovy

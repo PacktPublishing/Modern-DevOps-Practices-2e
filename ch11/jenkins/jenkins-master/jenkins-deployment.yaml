@@ -26,6 +26,10 @@ spec:
         env:
         - name: JAVA_OPTS
           value: -Djenkins.install.runSetupWizard=false
+        - name: JENKINS_ADMIN_ID
+          value: admin
+        - name: JENKINS_ADMIN_PASS
+          value: <CHOOSE_A_PASSWORD>
         ports:
         - containerPort: 8080
         - containerPort: 50000
