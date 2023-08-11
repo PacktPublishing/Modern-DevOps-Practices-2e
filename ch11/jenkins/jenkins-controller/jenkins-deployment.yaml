@@ -28,8 +28,8 @@ spec:
           value: -Djenkins.install.runSetupWizard=false
         - name: JENKINS_ADMIN_ID
           value: admin
-        - name: JENKINS_ADMIN_PASS
-          value: <CHOOSE_A_PASSWORD>
+        - name: JENKINS_ADMIN_PASSWORD
+          value: <jenkins_admin_pass>
         ports:
         - containerPort: 8080
         - containerPort: 50000

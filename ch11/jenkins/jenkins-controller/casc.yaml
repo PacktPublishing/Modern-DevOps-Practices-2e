@@ -1,5 +1,6 @@
 jenkins:
-  systemMessage: "Configuring Jenkins using Jenkins CasC"
+  systemMessage: "Welcome to Jenkins!"
+  numExecutors: 0
   remotingSecurity:
    enabled: true
   securityRealm:
@@ -15,10 +16,10 @@ jenkins:
         - "Overall/Read:authenticated"
   clouds:
   - kubernetes:
-      serverUrl: "https://[YOUR_K8S_SERVER_URL_HERE]"
+      serverUrl: "https://<kubernetes_control_plane_ip>"
       skipTlsVerify: false
       useJenkinsProxy: false
-      jenkinsUrl: "https://jenkins-service:8080"
+      jenkinsUrl: "http://jenkins-service:8080"
       jenkinsTunnel: "jenkins-service:50000"
       maxRequestsPerHost: 32
       name: "kubernetes"
@@ -31,13 +32,17 @@ jenkins:
         label: "jenkins-agent"
         hostNetwork: false
         nodeUsageMode: "NORMAL"
+        serviceAccount: "jenkins"
         imagePullSecrets:
           - name: regcred
         yamlMergeStrategy: "override"
         containers:
         - name: jnlp 
           image: "bharamicrosystems/jenkins-jnlp-kaniko"
+          alwaysPullImage: true
           workingDir: "/home/jenkins/agent"
+          command: ""
+          args: ""
           livenessProbe:
             failureThreshold: 1
             initialDelaySeconds: 2

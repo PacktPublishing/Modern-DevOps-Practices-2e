@@ -1,0 +1,12 @@
+configuration-as-code
+matrix-auth
+ssh-slaves
+email-ext
+mailer
+slack
+htmlpublisher
+greenballs
+simple-theme-plugin
+kubernetes
+git
+github
