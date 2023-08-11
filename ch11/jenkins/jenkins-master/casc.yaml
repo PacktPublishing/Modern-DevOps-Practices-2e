@@ -13,6 +13,41 @@ jenkins:
       permissions:
         - "Overall/Administer:admin"
         - "Overall/Read:authenticated"
+  clouds:
+  - kubernetes:
+      serverUrl: "https://[YOUR_K8S_SERVER_URL_HERE]"
+      skipTlsVerify: false
+      useJenkinsProxy: false
+      jenkinsUrl: "https://jenkins-service:8080"
+      jenkinsTunnel: "jenkins-service:50000"
+      maxRequestsPerHost: 32
+      name: "kubernetes"
+      readTimeout: 15
+      podLabels:
+        - key: jenkins
+          value: agent
+      templates:
+      - name: "jenkins-agent"
+        label: "jenkins-agent"
+        hostNetwork: false
+        nodeUsageMode: "NORMAL"
+        imagePullSecrets:
+          - name: regcred
+        yamlMergeStrategy: "override"
+        containers:
+        - name: jnlp 
+          image: "bharamicrosystems/jenkins-jnlp-kaniko"
+          workingDir: "/home/jenkins/agent"
+          livenessProbe:
+            failureThreshold: 1
+            initialDelaySeconds: 2
+            periodSeconds: 3
+            successThreshold: 4
+            timeoutSeconds: 5          
+        volumes:
+          - secretVolume:
+              mountPath: /kaniko/.docker
+              secretName: regcred
 unclassified:
   location:
     url: http://127.0.0.1:8080/
