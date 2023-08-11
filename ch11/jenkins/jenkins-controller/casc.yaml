@@ -38,7 +38,7 @@ jenkins:
         yamlMergeStrategy: "override"
         containers:
         - name: jnlp 
-          image: "bharamicrosystems/jenkins-jnlp-kaniko"
+          image: "<your_dockerhub_user>/jenkins-jnlp-kaniko"
           alwaysPullImage: true
           workingDir: "/home/jenkins/agent"
           command: ""

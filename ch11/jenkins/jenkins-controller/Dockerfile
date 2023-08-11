@@ -1,5 +1,4 @@
 FROM jenkins/jenkins
-USER jenkins
 ENV CASC_JENKINS_CONFIG /usr/local/casc.yaml
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 COPY casc.yaml /usr/local/casc.yaml
