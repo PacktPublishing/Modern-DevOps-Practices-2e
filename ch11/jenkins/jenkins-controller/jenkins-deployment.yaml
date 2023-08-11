@@ -22,7 +22,7 @@ spec:
           claimName: jenkins-pv-claim
       containers:
       - name: jenkins
-        image: <your_dockerhub_user>/jenkins-master-kaniko
+        image: <your_dockerhub_user>/jenkins-controller-kaniko
         env:
         - name: JAVA_OPTS
           value: -Djenkins.install.runSetupWizard=false
