@@ -2,9 +2,13 @@ from flask import Flask, request, jsonify
 import pymongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+import urllib.parse
+import os
 
 app = Flask(__name__)
-client = MongoClient('mongodb://mongodb:27017/')
+username = os.environ.get('MONGODB_USERNAME')
+password = os.environ.get('MONGODB_PASSWORD')
+client = MongoClient(f'mongodb://{username}:{urllib.parse.quote_plus(str(password))}@mongodb:27017/')
 db = client['blog']
 collection = db['users']
 
