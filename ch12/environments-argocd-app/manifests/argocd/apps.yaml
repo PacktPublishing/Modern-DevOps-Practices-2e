@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argo-apps
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/bharatmicrosystems/mdo-environments.git
+      revision: HEAD
+      directories:
+      - path: manifests/*
+      - path: manifests/argocd
+        exclude: true
+  template:
+    metadata:
+      name: '{{.path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/bharatmicrosystems/mdo-environments.git
+        targetRevision: HEAD
+        path: '{{.path}}'
+      destination:
+        server: https://kubernetes.default.svc
+      syncPolicy:
+        automated:
+          selfHeal: true
