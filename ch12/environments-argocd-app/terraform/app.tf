@@ -1,5 +1,5 @@
 data "kubectl_file_documents" "apps" {
-    pattern = "../manifests/argocd/apps.yaml"
+    content = file("../manifests/argocd/apps.yaml")
 }
 
 resource "kubectl_manifest" "apps" {

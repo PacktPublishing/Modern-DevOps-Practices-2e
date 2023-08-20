@@ -4,25 +4,23 @@ metadata:
   name: argo-apps
   namespace: argocd
 spec:
-  goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
   generators:
   - git:
       repoURL: https://github.com/bharatmicrosystems/mdo-environments.git
-      revision: HEAD
+      revision: dev
       directories:
       - path: manifests/*
       - path: manifests/argocd
         exclude: true
   template:
     metadata:
-      name: '{{.path.basename}}'
+      name: '{{path.basename}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/bharatmicrosystems/mdo-environments.git
-        targetRevision: HEAD
-        path: '{{.path}}'
+        targetRevision: dev
+        path: '{{path}}'
       destination:
         server: https://kubernetes.default.svc
       syncPolicy:

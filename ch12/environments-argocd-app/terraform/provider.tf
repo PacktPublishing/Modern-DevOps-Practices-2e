@@ -19,7 +19,6 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket  = "tf-state-mdo-terraform-${var.project_id}"
     prefix  = "mdo-terraform"
   }
 }
