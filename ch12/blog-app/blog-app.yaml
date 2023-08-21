@@ -4,16 +4,6 @@ metadata:
   name: blog-app
 ---
 apiVersion: v1
-kind: Secret
-metadata:
-  name: mongodb-creds
-  namespace: blog-app
-type: Opaque
-data:
-  MONGO_INITDB_ROOT_USERNAME: cm9vdA==
-  MONGO_INITDB_ROOT_PASSWORD: c3VwZXItc2VjcmV0LXBhc3N3b3Jk
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mongodb-pvc
