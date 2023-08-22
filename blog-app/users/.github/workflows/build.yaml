@@ -17,4 +17,4 @@ jobs:
       run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USER  }}/mdo-users:$(git rev-parse --short "$GITHUB_SHA")
     - name: Push the Docker image
       id: push
-      run: docker push ${{ secrets.DOCKER_USER  }}/mdo-users
+      run: docker push ${{ secrets.DOCKER_USER  }}/mdo-users:$(git rev-parse --short "$GITHUB_SHA")
