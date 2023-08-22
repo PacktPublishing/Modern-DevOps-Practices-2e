@@ -1,1 +1,0 @@
-# argo-cd-example
