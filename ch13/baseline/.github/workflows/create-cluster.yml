@@ -1,0 +1,21 @@
+name: Create Kubernetes Cluster
+on: push
+jobs:
+  deploy-terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
+    steps:
+    - uses: actions/checkout@v2
+    - name: Reformat argocd applicationset config
+      id: reformat-argocd-applicationset
+      run: sed -i "s/HEAD/${GITHUB_REF##*/}/g" ../manifests/argocd/apps.yaml
+    - name: Install Terraform
+      id: install-terraform
+      run: wget -O terraform.zip https://releases.hashicorp.com/terraform/1.5.5/terraform_1.5.5_linux_amd64.zip && unzip terraform.zip && chmod +x terraform && sudo mv terraform /usr/local/bin
+    - name: Apply Terraform
+      id: apply-terraform
+      run: terraform init -backend-config="bucket=tf-state-mdo-terraform-${{ secrets.PROJECT_ID }}" && terraform workspace select ${GITHUB_REF##*/} ||  terraform workspace new ${GITHUB_REF##*/} && terraform apply -auto-approve -var="project_id=${{ secrets.PROJECT_ID  }}" -var="branch=${GITHUB_REF##*/}"
+      env:
+        GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
