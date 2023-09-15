@@ -12,8 +12,3 @@ jobs:
     needs: [create-environment-and-deploy-app]
     uses: ./.github/workflows/run-tests.yml
     secrets: inherit
-  binary-auth:
-    name: Attest Images
-    needs: [run-tests]
-    uses: ./.github/workflows/attest-images.yml
-    secrets: inherit
