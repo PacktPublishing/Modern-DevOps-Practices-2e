@@ -6,16 +6,16 @@ metadata:
   namespace: blog-app
 spec:
   secretStoreRef:
-    kind: SecretStore
+    kind: ClusterSecretStore
     name: gcp-backend
   target:
     name: mongodb-creds
   data:
   - secretKey: MONGO_INITDB_ROOT_USERNAME
     remoteRef:
-      key: mongodb-creds
+      key: external-secrets
       property:  MONGO_INITDB_ROOT_USERNAME
   - secretKey: MONGO_INITDB_ROOT_PASSWORD
     remoteRef:
-      key: mongodb-creds
+      key: external-secrets
       property:  MONGO_INITDB_ROOT_PASSWORD
