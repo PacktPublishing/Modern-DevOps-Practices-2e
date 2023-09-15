@@ -25,7 +25,7 @@ jobs:
           DIGEST=$(docker pull $image | grep Digest | awk {'print $2'})
           image_name=$(echo $image | awk -F ':' {'print $1'})
           attestation_present=$(gcloud beta container binauthz attestations list --attestor-project="${{ secrets.PROJECT_ID }}" --attestor="${{ secrets.ATTESTOR_NAME }}" --artifact-url="docker.io/${image_name}@${DIGEST}")
-          if [[ $attestation_present == "Listed 0 items." ]]; then
+          if [ -z "${attestation_present// }" ]; then
             gcloud beta container binauthz attestations sign-and-create --artifact-url="docker.io/${image_name}@${DIGEST}" --attestor="${{ secrets.ATTESTOR_NAME }}" --attestor-project="${{ secrets.PROJECT_ID }}" --keyversion-project="${{ secrets.PROJECT_ID }}" --keyversion-location="${{ secrets.KMS_KEY_LOCATION }}" --keyversion-keyring="${{ secrets.KMS_KEYRING_NAME }}" --keyversion-key="${{ secrets.KMS_KEY_NAME }}" --keyversion="${{ secrets.KMS_KEY_VERSION }}"
           fi
         done
