@@ -1,0 +1,9 @@
+name: Prod Continuous Delivery Workflow
+on:
+  push:
+    branches: [ prod ]
+jobs:
+  create-environment-and-deploy-app:
+    name: Create Environment and Deploy App
+    uses: ./.github/workflows/create-cluster.yml
+    secrets: inherit

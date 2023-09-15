@@ -63,7 +63,6 @@ def register():
     email = request.form.get("email")
     password = bcrypt.generate_password_hash(
         request.form.get("password")).decode('utf-8')
-    print('password', password, flush=True)
     # Create a user using the users service
     response = requests.post(f'{users_service_url}/users', json={
                              'firstname': firstname, 'lastname': lastname, 'email': email, 'password': password})
@@ -84,7 +83,7 @@ def update_profile():
     firstname = request.form.get("firstname")
     lastname = request.form.get("lastname")
     password = request.form.get("password")
-    # Create a user using the users service
+    # Update a user using the users service
     response = requests.put(f'{users_service_url}/users/{user_id}', json={
                             'firstname': firstname, 'lastname': lastname, 'password': password})
     # Get the credentials from the users service
@@ -96,6 +95,15 @@ def update_profile():
     user.pop('password')
     session["user"] = user
     return index()
+
+@app.route('/deleteprofile', methods=['POST'])
+def delete_profile():
+    user_id = session["user"]["_id"]
+    # Delete the user
+    print('user_id', user_id, flush=True)
+    response = requests.delete(f'{users_service_url}/users/{user_id}')
+    print('response', response, flush=True)
+    return logout()
 
 
 @app.route('/posts/<post_id>')

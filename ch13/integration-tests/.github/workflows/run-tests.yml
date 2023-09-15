@@ -1,0 +1,33 @@
+name: Run Integration Tests
+on: [workflow_call]
+jobs:
+  test-application:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./tests
+    steps:
+    - uses: actions/checkout@v2
+    - name: Extract branch name
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
+    - id: gcloud-auth
+      name: Authenticate with gcloud
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+    - name: Set up Cloud SDK
+      id: setup-gcloud-sdk
+      uses: 'google-github-actions/setup-gcloud@v1'
+    - name: Get kubectl credentials
+      id: 'get-credentials'
+      uses: 'google-github-actions/get-gke-credentials@v1'
+      with:
+        cluster_name: mdo-cluster-${{ steps.extract_branch.outputs.branch }}
+        location: ${{ secrets.CLUSTER_LOCATION }}
+    - name: Compute Application URL
+      id: compute-application-url
+      run: external_ip=$(kubectl get svc -n blog-app frontend --output jsonpath='{.status.loadBalancer.ingress[0].ip}') && echo ${external_ip} && sed -i "s/localhost/${external_ip}/g" integration-test.py
+    - id: run-integration-test
+      name: Run Integration Test
+      run: python3 integration-test.py
