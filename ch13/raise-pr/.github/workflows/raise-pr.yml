@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./tests
+        working-directory: .
     steps:
       - uses: actions/checkout@v2
       - name: Raise a Pull Request
