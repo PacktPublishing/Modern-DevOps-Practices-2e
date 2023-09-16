@@ -9,7 +9,7 @@ jobs:
     secrets: inherit
   run-tests:
     name: Run Integration Tests
-    needs: [deploy-app]
+    needs: [create-environment-and-deploy-app]
     uses: ./.github/workflows/run-tests.yml
     secrets: inherit
   binary-auth:
