@@ -1,0 +1,21 @@
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: mongodb-creds
+  namespace: blog-app
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gcp-backend
+  target:
+    name: mongodb-creds
+  data:
+  - secretKey: MONGO_INITDB_ROOT_USERNAME
+    remoteRef:
+      key: external-secrets
+      property:  MONGO_INITDB_ROOT_USERNAME
+  - secretKey: MONGO_INITDB_ROOT_PASSWORD
+    remoteRef:
+      key: external-secrets
+      property:  MONGO_INITDB_ROOT_PASSWORD

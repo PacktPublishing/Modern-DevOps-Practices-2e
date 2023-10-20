@@ -1,0 +1,24 @@
+name: Dev Continuous Delivery Workflow
+on:
+  push:
+    branches: [ dev ]
+jobs:
+  create-environment-and-deploy-app:
+    name: Create Environment and Deploy App
+    uses: ./.github/workflows/create-cluster.yml
+    secrets: inherit
+  run-tests:
+    name: Run Integration Tests
+    needs: [create-environment-and-deploy-app]
+    uses: ./.github/workflows/run-tests.yml
+    secrets: inherit
+  binary-auth:
+    name: Attest Images
+    needs: [run-tests]
+    uses: ./.github/workflows/attest-images.yml
+    secrets: inherit
+  raise-pull-request:
+    name: Raise Pull Request
+    needs: [binary-auth]
+    uses: ./.github/workflows/raise-pr.yml
+    secrets: inherit

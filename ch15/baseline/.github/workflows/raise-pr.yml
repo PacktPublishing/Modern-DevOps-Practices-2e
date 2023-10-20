@@ -1,0 +1,16 @@
+name: Raise Pull Request
+on: [workflow_call]
+jobs:
+  raise-pull-request:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v2
+      - name: Raise a Pull Request
+        id: pull-request
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: prod
+          github_token: ${{ secrets.GH_TOKEN }}
