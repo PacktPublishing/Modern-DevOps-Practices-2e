@@ -45,7 +45,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-ingress
+  name: istio-ingress-helm
   namespace: argo
 spec:
   project: default

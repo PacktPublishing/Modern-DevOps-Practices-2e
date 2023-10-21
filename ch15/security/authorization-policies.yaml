@@ -1,0 +1,75 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: posts
+  namespace: blog-app
+spec:
+  selector:
+    matchLabels:
+      app: posts
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/blog-app/sa/frontend"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: reviews
+  namespace: blog-app
+spec:
+  selector:
+    matchLabels:
+      app: reviews
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/blog-app/sa/frontend"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: users
+  namespace: blog-app
+spec:
+  selector:
+    matchLabels:
+      app: users
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/blog-app/sa/frontend"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: ratings
+  namespace: blog-app
+spec:
+  selector:
+    matchLabels:
+      app: ratings
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/blog-app/sa/reviews"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: mongodb
+  namespace: blog-app
+spec:
+  selector:
+    matchLabels:
+      app: mongodb
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/blog-app/sa/posts", "cluster.local/ns/blog-app/sa/reviews", "cluster.local/ns/blog-app/sa/ratings", "cluster.local/ns/blog-app/sa/users"]
+
