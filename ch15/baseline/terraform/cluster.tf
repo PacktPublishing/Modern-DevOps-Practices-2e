@@ -6,7 +6,7 @@ resource "google_service_account" "main" {
 resource "google_container_cluster" "main" {
   name               = "${var.cluster_name}-${var.branch}"
   location           = var.location
-  initial_node_count = 3
+  initial_node_count = 4
   dynamic "binary_authorization" {
     for_each = var.branch == "prod" ? [1] : []
     content {
