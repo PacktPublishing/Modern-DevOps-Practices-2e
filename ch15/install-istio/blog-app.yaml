@@ -262,7 +262,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: docker.io/bharamicrosystems/mdo-frontend@sha256:873526fe6de10e04c42566bbaa47b76c18f265fd65aab29ddf3fa81f957e1a44
+          image: docker.io/bharamicrosystems/mdo-frontend@sha256:e83f23f1355c013b0858b50d21fd63b183d1389a8eb5eec879633a8ed0437828
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
