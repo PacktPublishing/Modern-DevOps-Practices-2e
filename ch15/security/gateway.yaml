@@ -1,0 +1,52 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: blog-app-gateway
+  namespace: blog-app
+spec:
+  selector:
+    istio: ingress
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: blogapp-tls-credentials
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: blog-app
+  namespace: blog-app
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - blog-app-gateway
+  http:
+  - match:
+    - uri:
+        exact: /
+    - uri:
+        prefix: /static
+    - uri:
+        prefix: /posts
+    - uri:
+        exact: /login
+    - uri:
+        exact: /logout
+    - uri:
+        exact: /register
+    - uri:
+        exact: /updateprofile
+    - uri:
+        exact: /deleteprofile
+    route:
+    - destination:
+        host: frontend
+        port:
+          number: 80
