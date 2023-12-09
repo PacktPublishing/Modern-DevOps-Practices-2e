@@ -105,7 +105,6 @@ if __name__ == '__main__':
         test_update_post(post_id)
         review_id=test_add_review(post_id)
         test_update_review(post_id, review_id)
-        #test_update_profile()
     finally:
         if post_id is not None and review_id is not None:
             test_delete_review(post_id, review_id)
