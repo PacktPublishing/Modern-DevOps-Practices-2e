@@ -1,3 +1,6 @@
+
+<b><p align='center'>[![Packt Sale](https://static.packt-cdn.com/assets/images/image.jpeg)](https://www.packtpub.com/)</p></b>Get this book on sale at [Packt](https://www.packtpub.com/).
+
 # Modern DevOps Practices - Second Edition
 
 <a href="https://www.packtpub.com/product/modern-devops-practices-second-edition/9781805121824"><img src="https://content.packt.com/B19877/cover_image_small.jpg" alt="no-image" height="256px" align="right"></a>
